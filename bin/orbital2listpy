@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from LiveCellAnalysis.orbital2listpy import main
+
+if __name__ == '__main__':
+    main()

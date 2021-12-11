@@ -1,0 +1,136 @@
+#### Parameters for pipeline_livecell_correlation_functions.py script
+
+#### This script is meant to calculate correlation functions on a dataset. The dataset is specified in a list.py file (and can be a combination of multiple experiments).
+
+#### specify input list.py and outputfolder
+#  -PyFile: full path of input file. For example: "/DATA/lenstra_lab/XXXX/LiveCell_analysis/YYYY_checked.list.py"
+#  -outputfolder: full path of outputfolder. For example: "/DATA/lenstra_lab/XXXX/LiveCell_analysis/
+#  -moreParams: load missing parameters from another parameter file at an absolute path or a path relative to this parameter file, absent or None to not use
+
+PyFile:
+outputfolder:
+moreParams:
+
+#### specify which part of the code you want to run.
+#  -processTraces: 1: load data + background subtract traces, 0: skip
+#  -filterTraces: 1: filter traces without bursts, 0: skip
+#  -makePlots: 1: make plots of processed data (heatmaps, individual correlation functions, area under trace, etc), 0: skip
+#  -calcCF: 1: calculation correlation functions, 0: skip calculation (for example if you just want to run the plots again with different parameters).
+#  -makeCFplot: 1: generate CF plots with fits, 0: skip.
+#  -makeHistogram: 1: generate Histogram of burst duration and burst frequency, 0: skip
+#  -SingleCellParams: 1: calculate bursting parameters (frequency, duration, number of bursts, and intensity in on-state) of each individual cell. Outputs txt files with the averages per cell and histograms.
+
+processTraces: True
+filterTraces: True
+makePlots: True
+calcCF: True
+makeCFplot: True
+makeHistogram: True
+SingleCellParams: True
+
+#################
+#### PARAMETERS
+
+#### Processing parameters:
+
+#  -mTauOrder: 0: fft is used for correlation function calculation, integer > 0: multi-tau algorithm is used with order mTauOrder, which resamples every order steps to smooth out errors at large time lag.
+#  -ccfFunction: function to use for calculating the average correlation function; default: empty (None) or '' --> using the cf of the mean signal, other option: LineFit or SC --> using a linefit for correcting stationary effects, ONLY use when data is somewhat uniform
+#  -fitWindow: used with ccfFunction=LineFit: window in frames for fitting the acf (both green and red) and ccf (both negative and positive sides), [start, end], will omit linefitting if fitWindow is None
+#  -scaleFactors: either None or list of scalefactors with same length as nr of traces, to scale specific traces (for example to correct for day effects).
+#  -ChannelsToAnalyze: [0] is red only, [1] is green only, [0,1] is red and green.
+#  -binaryCallMethod: threshold (default), markov_ensemble or markov_individual: method to use for determining on/off state
+#  -sdThresholdRed: Threshold used to call binary data in the red channel. Unit are in s.d. of the background noise. Is used to find first burst for alignTraces and for histogram.
+#  -sdThresholdGreen: Threshold used to call binary data in the green channel. Unit are in s.d. of the background noise. Is used to find first burst for alignTraces and for histogram.
+#  -bgWindowRed and bgWindowGreen: If automatic background subtraction fails, you can use this parameter to specify the frame window to use for estimating the background. Each elements are traces:[first_frame,last_frame]. For traces that are not specified here, the background is calculated based on the region in the track_movies where no high intensity spot was found.
+
+mTauOrder: 0
+ccfFunction:
+fitWindow:
+scaleFactors:
+ChannelsToAnalyze: [0, 1]
+binaryCallMethod: threshold
+sdThresholdRed: 1
+sdThresholdGreen: 1
+
+bgWindowRed: 1
+bgWindowGreen: 1
+
+#### heatmap parameters:
+
+#  -heatMapScalingRed and heatMapScalingGreen: None or integer value of the max scaling factor for the heatmap of the traces.
+#  -trimHeatmaps: 0 or 1. Set to 1 if you want to remove all frames outside of the framewindow from the displayed heatmaps of the traces
+#  -CalcIndTime: 1: calculates a list of induction times per cell (when the first burst is detected, based on the sdThreshold of that color). Output is written to text file.
+#  -SortHeatMapIndTimes: "red" or "green" if you want to output additional heatmaps that are sorted by the induction time of indicated color. Only works if CaclIndTimes: 1. Set to None if you don't want these heatmaps.
+#  -OrderTraceHeatmap: 'CF' or None. If CF, the ordering will be the same as the OrderCFHeatmap
+#  -OrderCFHeatmap:
+        # - None or 'None' if no ordering
+        # -'maxCC' if order of CF heatmap should be calculated as the location of the max in the croscorrelation. To determine method of calculating the max, set maxCCMethod.
+        # -'ACred' if order should be determined by the 2nd point in the red autocorrelation
+        # -'ACgreen' if order should be determined by the 2nd point in the green autocorrelation.
+#  -maxCCMethod: only if OrderCFHeatmap is maxCC, choose between 'max' or 'gaussian'. With max, the data is ordered on the location of the max in the crosscorrelation. With guassian, the data is ordered, where first the data without a positive peak is taken out, and then the remaining is ordered by the crosscorrelation max determined with a gaussian fit.
+
+heatMapScalingRed:
+heatMapScalingGreen:
+trimHeatmaps: False
+CalcIndTimes: True
+SortHeatMapIndTimes:
+
+OrderTraceHeatmap: CF
+OrderCFHeatmap: maxCC
+maxCCMethod: gaussian
+
+#### select or align traces for analysis
+
+#  -tracesToExclude: list of traces to exclude from the analyisis (e.g. those where only very few frames are not background)
+#  -selectOnDistance: 1: select parts of traces based on distance between green and red. Distance can be set in script. 0: do not select
+#  -alignTracesCF: 1: align traces on first burst before calculating the correlation functions. 0: do not align.
+#  -color2align: if alignTracesCF: 1, choose "red" or "green" to align on first burst in red or green channel. You have to check alignment in "_average_trace.pdf" file. Binary call can be changed by changing the sdThreshold or the bgWindow.
+#  -minLengthCF: minimum number of frames that needs to be in a trace to be included in calculation of correlation functions. Set to 0 if no filtering is to be done.
+#  -quantizeTrace: dict: {channel: N_levels}; use kmeans to split a trace into levels. Example: {0: 3, 2: 5}, absent or None to not use
+#  -smoothTrace: dict: {channel: [window_length, polyorder]}; use a Savitzky-Golayfilter filter to smooth the data. window_length must be an odd integer. Example: {1: [19, 3]}, absent or None to not use
+#  -globalFrameWindow: [start, end] in frames, applied to all traces, absent or None to not use
+#  -nBs: number of bootstrap repetitions
+
+tracesToExclude: []
+selectOnDistance: False
+alignTracesCF: True
+color2align: green
+minLengthCF: 0
+quantizeTrace:
+smoothTrace:
+globalFrameWindow:
+nBs: 10000
+
+#### parameters for plotting correlation functions
+
+#  -ACFxmax: max x value for zoomed ACF plots. Example: 500
+#  -CCxlim: None (automatic) or list of start and end value for the xlim of the cc plot. For example: [-300,500]
+#  -ICCxlim: list with start and end value for the xlim of the individual cc plots, example: [-400,600]
+#  -IACxlim: list with end values for the xlims of each channel, example: [500] if one channel, [500,600] if two channels
+#  -fitFramesRed and fitFramesGreen: list of start and end frames for fitting auto correlation functions. We usually do not want to include the 0 point. Example: [1,150]
+#  -fitFramesCCLeft/Right: list of start and end of frames for fitting left and right sides of the cross correlation functions. Both sides are fitted together, but we might want to exclude points around t=0. Example: [5, 20]
+#  -shiftACFRed and shiftACFGreen and shiftCC: shift of the correlation function in y direction. Example: 0.2
+
+ACFxmax: 1000
+CCxlim:
+ICCxlim: [-1000, 1000]
+IACxlim: [1000, 1000]
+fitFramesRed: [1, 100]
+fitFramesGreen: [1, 100]
+fitFramesCCLeft: [0, 500]
+fitFramesCCRight: [0, 500]
+shiftACFRed: 0
+shiftACFGreen: 0
+shiftCC: 0
+
+#### Histogram parameters:
+
+#  -binSizeHistogram: time interval histogram burst duration and burst frequency in seconds
+#  -maxXaxisHistogram: range histogram burst duration and burst frequency in seconds
+#  -Remove1FrameJumps: Set 1 one if, for processing single cell bursting parameters (SingleCellParams: 1), bursts of 1 frame are to be excluded.
+#  -Remove1FrameGaps: Set 1 one if, for processing single cell bursting parameters (SingleCellParams: 1), gaps between bursts 1 frame are to be excluded.
+
+binSizeHistogram: 10
+maxXaxisHistogram: 100
+Remove1FrameJumps: True
+Remove1FrameGaps: True
