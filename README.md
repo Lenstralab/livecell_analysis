@@ -1,4 +1,6 @@
 # Live Cell Analysis
+as used by Brouwer et al.
+
 ## Installation
     git clone --recurse-submodules https://gitlab.rhpc.nki.nl/LenstraLab/LiveCellAnalysis.git
     cd LiveCellAnalysis
