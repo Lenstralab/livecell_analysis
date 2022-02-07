@@ -14,7 +14,7 @@ setuptools.setup(
     description='Live cell analysis code for the Lenstra lab.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://gitlab.rhpc.nki.nl/LenstraLab/LiveCellAnalysis',
+    url='https://github.com/Lenstralab/livecell_analysis.git',
     packages=['LiveCellAnalysis'],
     classifiers=[
         'Programming Language :: Python :: 3',

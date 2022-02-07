@@ -2,17 +2,8 @@
 as used by Brouwer et al.
 
 ## Installation
-    git clone --recurse-submodules https://gitlab.rhpc.nki.nl/LenstraLab/LiveCellAnalysis.git
-    cd LiveCellAnalysis
-    git submodule foreach --recursive git checkout master
-    pip install -e . --user
-
-If you forget about the --recurse-submodules part, the submodule tllab_common will not be pulled from git, but the
-version installed on curie will be used instead.
-
-## Updating
-### PyCharm
-Git > Update Project... (Ctrl+T)
+    git clone https://github.com/Lenstralab/livecell_analysis.git
+    pip install -e livecell_analysis --user
 
 ## Usage
 ### Track Movies
