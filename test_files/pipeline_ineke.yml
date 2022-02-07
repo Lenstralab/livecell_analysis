@@ -4,8 +4,9 @@
 #########################################################################################################
 
 
-pathIn: "/DATA/lenstra_lab/shared/Heta/two-color_data/19000101/YTL1185_60mingal_1/" ### put path of input folder raw data, or your ims image
-outputfolder: "/DATA/lenstra_lab/w.pomp/test/out"
+folderIn: "demo_data/" ### put path of input folder raw data, or your ims image
+expList: ["20200128"]
+outputfolder: "demo_output"
 
 MaxProj: 1             ### note: If manually made with FIJI, order or channels may be different and the number of timeframes may not be read correctly in python
 CellMask: 1            ### note: Makes cell mask. For 2 color data, uses green (2nd) channel

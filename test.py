@@ -36,7 +36,7 @@ def make_test_pipeline(parameter_file):
             yaml.dump(parameters, f)
         if parameters['TSregfile']:
             p = copy.deepcopy(parameters)
-            calculate_general_parameters(p)
+            calculate_general_parameters(p, parameter_file)
             for exp in range(0, p['lenExpList']):
                 p['pathIn'] = p['expList'][exp]
                 getPaths(p)

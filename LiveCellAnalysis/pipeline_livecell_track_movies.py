@@ -45,11 +45,15 @@ squareStamp = [np.r_[-5, -5, -5, -5, -5, -5, -5, -5, -4, -3, -2, 2, 3, 4, 5, 5, 
                np.r_[-5, -4, -3, -2, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2, -2, -3, -4, -5, -5, -5, -5, -5, -5, -5]]
 
 
-def calculate_general_parameters(params):
+def calculate_general_parameters(params, parameter_file):
     if params['folderIn'][-1] != "/": params['folderIn'] += "/"
     params['lenExpList'] = len(params['expList'])
     for i in range(params['lenExpList']):
-        params['expList'][i] = params['folderIn'] + params['expList'][i]
+        if os.path.exists(os.path.join(params['folderIn'], params['expList'][i])):
+            params['fileList'][i] = os.path.join(params['folderIn'], params['expList'][i])
+        else:
+            params['expList'][i] = os.path.join(os.path.dirname(os.path.abspath(parameter_file)),
+                                                params['folderIn'], params['expList'][i])
     if params['outputfolder'][-1] != "/": params['outputfolder'] += "/"
     return params
 
@@ -1161,7 +1165,7 @@ def pipeline(params):
     else:
         parameter_file = ''
 
-    calculate_general_parameters(params) # get general parameters
+    calculate_general_parameters(params, parameter_file) # get general parameters
     if params['TSregfile'] != [[]] and params['TSregfile'] != []:
         TSregfileList = params['TSregfile'] # store TSregfile
     else:

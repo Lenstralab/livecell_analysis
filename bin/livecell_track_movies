@@ -1,4 +1,4 @@
-#!/usr/local/bin/ipython3 -i
+#!/usr/bin/env python3
 
 from LiveCellAnalysis.pipeline_livecell_track_movies import main
 
