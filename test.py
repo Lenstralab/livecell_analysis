@@ -58,11 +58,7 @@ def make_test_pipeline(parameter_file):
                 'File {} has not been generated'.format(parameters['expPathOut']+'_'+file)
     return pipeline_fun
 
-#test_ineke  = make_test_pipeline('pipeline_livecell_track_movies_Ineke.yml') # takes very long
-test_linda  = make_test_pipeline('pipeline_livecell_track_movies_Linda.yml')
-#test_tineke = make_test_pipeline('pipeline_tineke.yml')
-test_bibi   = make_test_pipeline('pipeline_livecell_track_movies_Bibi.yml')
-test_heta   = make_test_pipeline('pipeline_livecell_track_movies_Heta.yml')
+test_track  = make_test_pipeline('pipeline_livecell_track_movies_test.yml')
 
 ## ----- This part runs the tests -----
     

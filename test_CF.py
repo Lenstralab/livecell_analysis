@@ -46,9 +46,7 @@ def make_test_pipeline_CF(parameter_file):
                 'File {} has not been generated'.format(parameters['file']+'_'+file)
     return pipeline_fun
 
-#test_linda  = make_test_pipeline_CF('pipeline_livecell_CF_Linda.yml')
-#test_bibi   = make_test_pipeline_CF('pipeline_livecell_CF_Bibi.yml')
-test_heta   = make_test_pipeline_CF('pipeline_livecell_correlationfunctions_Heta.yml')
+test_corr  = make_test_pipeline_CF('pipeline_livecell_correlationfunctions_test.yml')
 
 ## ----- This part runs the tests -----
     

@@ -384,10 +384,6 @@ def showTracking(Data, channels=None, expPathOut=None, sideViews=None, zSlices=N
         maxFileExists = False
 
     with imr(pathIn, transform=transform) as raw, imr(maxFile, transform=transform) as mx:
-        mx.masterch = raw.masterch
-        mx.slavech  = raw.slavech
-        mx.detector = raw.detector
-
         channels = channels or np.arange(raw.shape[2])
         nCh = min(len(channels), 3)
         if sideViews is None:

@@ -1066,7 +1066,7 @@ def pipeline_correlation_functions(params):
 def main():
     if len(sys.argv) < 2:
         parameter_files = [os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                                      'pipeline_livecell_correlationfunctions_parameters.yml'))]
+                                                      'pipeline_livecell_correlationfunctions_test.yml'))]
     else:
         parameter_files = sys.argv[1:]
 
